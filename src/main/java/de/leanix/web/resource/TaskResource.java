@@ -1,24 +1,35 @@
 package de.leanix.web.resource;
 
-import com.codahale.metrics.annotation.Timed;
+import de.leanix.persistance.repository.TaskRepository;
 import de.leanix.web.dto.TaskResponse;
+import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/todos")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskResource {
+    private final TaskRepository taskRepository;
+
+    @Inject
+    public TaskResource(final TaskRepository taskRepository){
+        this.taskRepository = taskRepository;
+    }
 
     @GET
-    @Timed
+    @UnitOfWork
     public List<TaskResponse> getAllTask() {
+        return taskRepository.findAll()
+                .stream()
+                .map(TaskResponse::toDto)
+                .collect(Collectors.toList());
 
-        System.out.println("hello");
-        return null;
     }
 }

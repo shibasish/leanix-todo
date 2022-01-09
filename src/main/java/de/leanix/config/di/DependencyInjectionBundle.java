@@ -18,10 +18,9 @@ public class DependencyInjectionBundle implements ConfiguredBundle<DependencyInj
                                 for (Class<?> singletonClass : configuration.getSingletons()) {
                                     bindAsContract(singletonClass).in(Singleton.class);
                                 }
-
-//                                for (NamedProperty<? extends Object> namedProperty : configuration.getNamedProperties()) {
-//                                    bind((Object) namedProperty.getValue()).to((Class<Object>) namedProperty.getClazz()).named(namedProperty.getId());
-//                                }
+                                for (NamedProperty<? extends Object> namedProperty : configuration.getNamedProperties()) {
+                                    bind((Object) namedProperty.getValue()).to((Class<Object>) namedProperty.getClazz()).named(namedProperty.getId());
+                                }
                             }
                         }
                 );

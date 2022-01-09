@@ -8,10 +8,10 @@ import java.util.UUID;
 
 public class Task {
 
-    UUID id;
-    String name;
-    Optional<String> description;
-    List<Task> tasks;
+    private UUID id;
+    private String name;
+    private Optional<String> description;
+    private List<Task> tasks;
 
     public Task(UUID id, String name, Optional<String> description, List<Task> tasks) {
         this.id = id;
