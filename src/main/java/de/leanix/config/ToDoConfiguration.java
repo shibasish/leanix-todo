@@ -1,35 +1,24 @@
 package de.leanix.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import de.leanix.config.di.DependencyInjectionConfiguration;
+import de.leanix.config.di.NamedProperty;
+import de.leanix.web.resource.TaskResource;
 import io.dropwizard.Configuration;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ToDoConfiguration extends Configuration {
+public class ToDoConfiguration extends Configuration implements DependencyInjectionConfiguration {
 
-    @NotEmpty
-    private String template;
-
-    @NotEmpty
-    private String defaultName = "Stranger";
-
-    @JsonProperty
-    public String getTemplate() {
-        return template;
+    @Override
+    public List<Class<?>> getSingletons() {
+        final List<Class<?>> result = new ArrayList();
+        result.add(TaskResource.class);
+        return result;
     }
 
-    @JsonProperty
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    @JsonProperty
-    public String getDefaultName() {
-        return defaultName;
-    }
-
-    @JsonProperty
-    public void setDefaultName(String name) {
-        this.defaultName = name;
+    @Override
+    public List<NamedProperty<? extends Object>> getNamedProperties() {
+        return null;
     }
 }

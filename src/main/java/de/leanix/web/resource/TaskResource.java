@@ -10,14 +10,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/hello-world")
+@Path("/todos")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskResource {
 
     @GET
-    @Path("/todos")
     @Timed
     public List<TaskResponse> getAllTask() {
+
+        System.out.println("hello");
         return null;
     }
 }
