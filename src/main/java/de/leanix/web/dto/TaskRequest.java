@@ -1,5 +1,6 @@
 package de.leanix.web.dto;
 
+import de.leanix.persistance.entity.Subtask;
 import de.leanix.persistance.entity.TaskEntity;
 
 import java.util.ArrayList;
@@ -45,12 +46,12 @@ public class TaskRequest {
         }
 
         public TaskEntity toEntity() {
-            List<TaskEntity> subTask = new ArrayList<>();
+            List<Subtask> subTasks = new ArrayList<>();
 
             this.tasks.stream().forEach( taskRequest ->
-                subTask.add(new TaskEntity(taskRequest.name, taskRequest.description.get(), null))
+                subTasks.add(new Subtask(taskRequest.name, taskRequest.description.get()))
             );
 
-            return new TaskEntity(this.name, this.description.get(), subTask);
+            return new TaskEntity(this.name, this.description.get(), subTasks);
         }
 }

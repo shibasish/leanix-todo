@@ -1,8 +1,8 @@
 package de.leanix.web.resource;
 
+import de.leanix.persistance.entity.Subtask;
 import de.leanix.persistance.entity.TaskEntity;
 import de.leanix.persistance.repository.TaskRepository;
-import de.leanix.web.dto.TaskRequest;
 import de.leanix.web.dto.TaskResponse;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.testing.junit5.ResourceExtension;
@@ -33,14 +33,14 @@ class TaskResourceTest {
             .addResource(new TaskResource(taskRepository))
             .build();
     private TaskEntity taskEntity;
-    private TaskEntity subtask;
+    private Subtask subtask;
     private TaskResponse response;
     private final static UUID id = UUID.randomUUID();
     private ArgumentCaptor<TaskEntity> taskEntityArgumentCaptor = ArgumentCaptor.forClass(TaskEntity.class);
 
     @BeforeEach
     void setUp() {
-        subtask = new TaskEntity("subtask", "desc", null);
+        subtask = new Subtask("subtask", "desc");
         taskEntity = new TaskEntity("task", "desc", Collections.singletonList(subtask));
         response = new TaskResponse(id, "task", Optional.empty(), null);
     }

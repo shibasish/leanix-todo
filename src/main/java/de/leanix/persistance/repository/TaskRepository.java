@@ -35,7 +35,6 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
     public TaskEntity createTask(TaskEntity taskEntity) throws PersistenceException {
         Session session = sessionFactory.getCurrentSession();
 
-        taskEntity.getTasks().forEach( subtask -> session.save(subtask) );
         session.save(taskEntity);
 
         return sessionFactory.getCurrentSession().get(TaskEntity.class, taskEntity.getId());

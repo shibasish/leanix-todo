@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Entity
+@Table(name = "TASK")
 public class TaskEntity {
     @Id
     @Column(nullable = false)
@@ -23,18 +24,17 @@ public class TaskEntity {
 
     private String description;
 
-    @OneToMany
-    @JoinTable(name = "SUBTASK", joinColumns = @JoinColumn(name = "TASK_ID"),
-                inverseJoinColumns = @JoinColumn(name = "SUB_TASK_ID"))
-    private List<TaskEntity> taskEntities = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = "SUBTASK", joinColumns = @JoinColumn(name = "TASK_ID", referencedColumnName = "id"))
+    private List<Subtask> subTasks = new ArrayList<>();
 
     public TaskEntity() {
     }
 
-    public TaskEntity(String name, String description, List<TaskEntity> taskEntities) {
+    public TaskEntity(String name, String description, List<Subtask> subTasks) {
         this.name = name;
         this.description = description;
-        this.taskEntities = taskEntities;
+        this.subTasks = subTasks;
     }
 
     public UUID getId() {
@@ -61,21 +61,21 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public List<TaskEntity> getTasks() {
-        return taskEntities;
+    public List<Subtask> getTasks() {
+        return subTasks;
     }
 
-    public void setTasks(List<TaskEntity> taskEntities) {
-        this.taskEntities = taskEntities;
+    public void setTasks(List<Subtask> subTasks) {
+        this.subTasks = subTasks;
     }
 
     public TaskResponse toResponse() {
-        List<SubtaskResponse> subTask = new ArrayList<>();
+        List<SubtaskResponse> subTasks = new ArrayList<>();
 
-        this.taskEntities.stream().forEach( taskRequest ->
-            subTask.add(new SubtaskResponse(taskRequest.name, Optional.of(taskRequest.description)))
+        this.subTasks.stream().forEach( sub ->
+                subTasks.add(new SubtaskResponse(sub.getName(), Optional.of(sub.getDescription())))
             );
 
-        return new TaskResponse(this.id, this.name, Optional.of(this.description), subTask);
+        return new TaskResponse(this.id, this.name, Optional.of(this.description), subTasks);
     }
 }
