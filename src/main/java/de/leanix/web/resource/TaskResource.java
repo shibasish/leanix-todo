@@ -51,6 +51,14 @@ public class TaskResource {
         return taskRepository.createTask(taskEntity).toResponse();
     }
 
+    @PUT
+    @Path("/{id}")
+    @UnitOfWork
+    public TaskResponse updateTask(@PathParam("id") UUID uuid, TaskEntity taskEntity) {
+        Optional<TaskEntity> updatedEntity = taskRepository.updateTask(uuid, taskEntity);
+        return updatedEntity.isPresent() ? updatedEntity.get().toResponse() : null;
+    }
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork

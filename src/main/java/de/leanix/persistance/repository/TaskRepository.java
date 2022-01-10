@@ -47,6 +47,24 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
         return findById(taskEntity.getId()).get();
     }
 
+    public Optional<TaskEntity> updateTask(UUID id, TaskEntity taskEntity) throws PersistenceException {
+        Session session = sessionFactory.getCurrentSession();
+
+        Optional<TaskEntity> savedTaskEntity = findById(id);
+        TaskEntity entity;
+
+        if(savedTaskEntity.isPresent()) {
+            entity = savedTaskEntity.get();
+            entity.setName(taskEntity.getName());
+            entity.setDescription(taskEntity.getDescription());
+            entity.setTasks(taskEntity.getTasks());
+            session.update(entity);
+            return Optional.of(entity);
+        }
+
+        return Optional.empty();
+    }
+
     public Boolean deleteTask(UUID id) throws PersistenceException {
         Session session = sessionFactory.getCurrentSession();
 
@@ -55,9 +73,9 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
         if(taskEntity.isPresent()) {
             session.delete(taskEntity.get());
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     private CriteriaQuery<TaskEntity> getCriteriaQuery(){
