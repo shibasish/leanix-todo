@@ -78,12 +78,23 @@ class TaskResourceTest {
 
     @Test
     void getTaskByIdShouldReturnTheTask() {
-        when(taskRepository.findById(id)).thenReturn(taskEntity);
+        when(taskRepository.findById(id)).thenReturn(Optional.of(taskEntity));
 
         TaskResponse response = EXT.target("/todos/"+id)
                 .request()
                 .get(TaskResponse.class);
 
         assertEquals(taskResponse.getName(), response.getName());
+    }
+
+    @Test
+    void deleteTaskByIdShouldDeleteAndReturnABoolean() {
+        when(taskRepository.deleteTask(id)).thenReturn(true);
+
+        Response response = EXT.target("/todos/"+id)
+                .request()
+                .delete();
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Singleton
@@ -33,8 +34,9 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
         return query.getResultList();
     }
 
-    public TaskEntity findById(UUID uuid) throws PersistenceException {
-        return sessionFactory.getCurrentSession().get(TaskEntity.class, uuid);
+    public Optional<TaskEntity> findById(UUID uuid) throws PersistenceException {
+        TaskEntity taskEntity = sessionFactory.getCurrentSession().get(TaskEntity.class, uuid);
+        return taskEntity != null ? Optional.of(taskEntity) : Optional.empty();
     }
 
     public TaskEntity createTask(TaskEntity taskEntity) throws PersistenceException {
@@ -42,7 +44,20 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
 
         session.save(taskEntity);
 
-        return findById(taskEntity.getId());
+        return findById(taskEntity.getId()).get();
+    }
+
+    public Boolean deleteTask(UUID id) throws PersistenceException {
+        Session session = sessionFactory.getCurrentSession();
+
+        Optional<TaskEntity> taskEntity = findById(id);
+
+        if(taskEntity.isPresent()) {
+            session.delete(taskEntity.get());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private CriteriaQuery<TaskEntity> getCriteriaQuery(){
