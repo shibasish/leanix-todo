@@ -1,11 +1,13 @@
 package de.leanix.web.resource;
 
+import de.leanix.persistance.entity.TaskEntity;
 import de.leanix.persistance.repository.TaskRepository;
 import de.leanix.web.dto.TaskResponse;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
@@ -31,5 +33,11 @@ public class TaskResource {
                 .map(TaskResponse::toDto)
                 .collect(Collectors.toList());
 
+    }
+
+    @POST
+    @UnitOfWork
+    public TaskResponse createTask(TaskEntity taskEntity) {
+        return taskRepository.createTask(taskEntity).toResponse();
     }
 }

@@ -2,6 +2,7 @@ package de.leanix.web.dto;
 
 import de.leanix.persistance.entity.TaskEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,9 +12,12 @@ public class TaskResponse {
     private UUID id;
     private String name;
     private Optional<String> description;
-    private List<TaskResponse> tasks;
+    private List<SubtaskResponse> tasks;
 
-    public TaskResponse(UUID id, String name, Optional<String> description, List<TaskResponse> tasks) {
+    public TaskResponse() {
+    }
+
+    public TaskResponse(UUID id, String name, Optional<String> description, List<SubtaskResponse> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -44,20 +48,26 @@ public class TaskResponse {
         this.description = description;
     }
 
-    public List<TaskResponse> getTasks() {
+    public List<SubtaskResponse> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<TaskResponse> tasks) {
+    public void setTasks(List<SubtaskResponse> tasks) {
         this.tasks = tasks;
     }
 
     public static TaskResponse toDto(TaskEntity taskEntity){
+        List<SubtaskResponse> subTask = new ArrayList<>();
+
+        taskEntity.getTasks().stream().forEach( subtask ->
+            subTask.add(new SubtaskResponse(subtask.getName(), Optional.of(subtask.getDescription())))
+        );
+
         return new TaskResponse(
                 taskEntity.getId(),
                 taskEntity.getName(),
                 taskEntity.getDescription() == null ? Optional.empty() : Optional.of(taskEntity.getDescription()),
-                null
+                subTask
         );
     }
 }
