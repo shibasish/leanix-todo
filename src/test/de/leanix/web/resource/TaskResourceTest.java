@@ -29,12 +29,13 @@ import static org.mockito.Mockito.*;
 class TaskResourceTest {
 
     private static final TaskRepository taskRepository = mock(TaskRepository.class);
+    private static final TaskResource taskResource = mock(TaskResource.class);
     private static final ResourceExtension EXT = ResourceExtension.builder()
             .addResource(new TaskResource(taskRepository))
             .build();
     private TaskEntity taskEntity;
     private Subtask subtask;
-    private TaskResponse response;
+    private TaskResponse taskResponse;
     private final static UUID id = UUID.randomUUID();
     private ArgumentCaptor<TaskEntity> taskEntityArgumentCaptor = ArgumentCaptor.forClass(TaskEntity.class);
 
@@ -42,7 +43,7 @@ class TaskResourceTest {
     void setUp() {
         subtask = new Subtask("subtask", "desc");
         taskEntity = new TaskEntity("task", "desc", Collections.singletonList(subtask));
-        response = new TaskResponse(id, "task", Optional.empty(), null);
+        taskResponse = new TaskResponse(id, "task", Optional.empty(), null);
     }
 
     @AfterEach
@@ -51,7 +52,7 @@ class TaskResourceTest {
     }
 
     @Test
-    void getAllTasks() {
+    void getAllTasksShouldReturnAllTaks() {
 
         when(taskRepository.findAll()).thenReturn(Collections.singletonList(taskEntity));
 
@@ -63,7 +64,7 @@ class TaskResourceTest {
     }
 
     @Test
-    void createTask() {
+    void createTaskShouldReturnNewlyCreatedTask() {
         when(taskRepository.createTask(any(TaskEntity.class))).thenReturn(taskEntity);
 
         Response response = EXT.target("/todos")
@@ -73,5 +74,16 @@ class TaskResourceTest {
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         verify(taskRepository).createTask(taskEntityArgumentCaptor.capture());
         assertEquals(taskEntityArgumentCaptor.getValue().getId(), taskEntity.getId());
+    }
+
+    @Test
+    void getTaskByIdShouldReturnTheTask() {
+        when(taskRepository.findById(id)).thenReturn(taskEntity);
+
+        TaskResponse response = EXT.target("/todos/"+id)
+                .request()
+                .get(TaskResponse.class);
+
+        assertEquals(taskResponse.getName(), response.getName());
     }
 }

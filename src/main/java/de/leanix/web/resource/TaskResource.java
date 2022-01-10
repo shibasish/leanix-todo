@@ -6,13 +6,11 @@ import de.leanix.web.dto.TaskResponse;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Path("/todos")
@@ -33,6 +31,13 @@ public class TaskResource {
                 .map(TaskResponse::toDto)
                 .collect(Collectors.toList());
 
+    }
+
+    @GET
+    @Path("/{id}")
+    @UnitOfWork
+    public TaskResponse getTaskWithId(@PathParam("id") UUID uuid) {
+        return taskRepository.findById(uuid).toResponse();
     }
 
     @POST

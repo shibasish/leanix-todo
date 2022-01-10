@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.UUID;
 
 @Singleton
 public class TaskRepository extends AbstractDAO<TaskEntity> {
@@ -32,12 +33,16 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
         return query.getResultList();
     }
 
+    public TaskEntity findById(UUID uuid) throws PersistenceException {
+        return sessionFactory.getCurrentSession().get(TaskEntity.class, uuid);
+    }
+
     public TaskEntity createTask(TaskEntity taskEntity) throws PersistenceException {
         Session session = sessionFactory.getCurrentSession();
 
         session.save(taskEntity);
 
-        return sessionFactory.getCurrentSession().get(TaskEntity.class, taskEntity.getId());
+        return findById(taskEntity.getId());
     }
 
     private CriteriaQuery<TaskEntity> getCriteriaQuery(){
