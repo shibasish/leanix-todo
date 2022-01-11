@@ -32,7 +32,7 @@ class TaskRepositoryTest {
                 () -> taskRepository.createTask(new TaskEntity("name", "desc", null)));
        assertEquals("name", taskEntity.getName());
        assertEquals("desc", taskEntity.getDescription());
-       assertNull(taskEntity.getTasks());
+       assertNull(taskEntity.getClass());
        assertEquals(taskEntity, taskRepository.findById(taskEntity.getId()).get());
     }
 
@@ -68,11 +68,12 @@ class TaskRepositoryTest {
         );
 
         TaskEntity updatedTaskEntity = new TaskEntity("name-1-updated", "desc-1", null);
-        updatedTaskEntity.setId(taskEntity.getId());
 
         Optional<TaskEntity> actualTaskEntity = taskRepository.updateTask(taskEntity.getId(), updatedTaskEntity);
 
-        assertEquals(updatedTaskEntity, actualTaskEntity.get());
+        assertEquals(updatedTaskEntity.getName(), actualTaskEntity.get().getName());
+        assertEquals(updatedTaskEntity.getDescription(), actualTaskEntity.get().getDescription());
+        assertNull(actualTaskEntity.get().getSubTasks());
     }
 
     @Test

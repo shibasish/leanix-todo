@@ -57,7 +57,7 @@ public class TaskRepository extends AbstractDAO<TaskEntity> {
             entity = savedTaskEntity.get();
             entity.setName(taskEntity.getName());
             entity.setDescription(taskEntity.getDescription());
-            entity.setTasks(taskEntity.getTasks());
+            entity.setSubTasks(taskEntity.getSubTasks());
             session.update(entity);
             return Optional.of(entity);
         }
