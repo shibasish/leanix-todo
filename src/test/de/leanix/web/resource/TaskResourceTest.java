@@ -4,7 +4,6 @@ import de.leanix.persistance.entity.Subtask;
 import de.leanix.persistance.entity.TaskEntity;
 import de.leanix.persistance.repository.TaskRepository;
 import de.leanix.web.dto.TaskResponse;
-import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.testing.junit5.ResourceExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.*;
 class TaskResourceTest {
 
     private static final TaskRepository taskRepository = mock(TaskRepository.class);
-    private static final TaskResource taskResource = mock(TaskResource.class);
     private static final ResourceExtension EXT = ResourceExtension.builder()
             .addResource(new TaskResource(taskRepository))
             .build();
@@ -88,21 +86,6 @@ class TaskResourceTest {
         assertEquals(taskResponse.getName(), response.getName());
     }
 
-
-//    @Test
-//    void updateTaskByIdShouldDeleteAndReturnABoolean() {
-//        TaskResponse updatedTaskResponse = new TaskResponse(id, "updated-name", Optional.of("desc"), null);
-//
-//        when(taskRepository.updateTask(id, any(TaskEntity.class))).thenReturn(Optional.of(taskEntity));
-////        when(taskResource.updateTask(id, taskEntity)).thenReturn(updatedTaskResponse);
-//
-//        Response response = EXT.target("/todos/"+id)
-//                .request()
-//                .put(Entity.entity(taskEntity, MediaType.APPLICATION_JSON_TYPE));
-//
-//        verify(taskRepository).updateTask(id, taskEntityArgumentCaptor.capture());
-//        assertEquals(taskEntityArgumentCaptor.getValue().getId(), taskEntity.getId());
-//    }
 
     @Test
     void deleteTaskByIdShouldDeleteAndReturnABoolean() {

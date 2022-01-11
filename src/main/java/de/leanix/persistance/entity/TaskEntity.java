@@ -6,16 +6,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "TASK")
 public class TaskEntity {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
     private UUID id = UUID.randomUUID();
@@ -72,12 +69,25 @@ public class TaskEntity {
     }
 
     public TaskResponse toResponse() {
-        List<SubtaskResponse> subTasks = new ArrayList<>();
+        List<SubtaskResponse> subtaskResponses = new ArrayList<>();
 
         this.subTasks.stream().forEach( sub ->
-                subTasks.add(new SubtaskResponse(sub.getName(), Optional.of(sub.getDescription())))
+                subtaskResponses.add(new SubtaskResponse(sub.getName(), Optional.of(sub.getDescription())))
             );
 
-        return new TaskResponse(this.id, this.name, Optional.of(this.description), subTasks);
+        return new TaskResponse(this.id, this.name, Optional.of(this.description), subtaskResponses);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskEntity that = (TaskEntity) o;
+        return id.equals(that.id) && name.equals(that.name) && Objects.equals(description, that.description) && Objects.equals(subTasks, that.subTasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, subTasks);
     }
 }
