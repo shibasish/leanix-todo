@@ -23,9 +23,10 @@
 * Docker
 
 ## Running the application
-* cd </root project directory/>
-* mvn clean package
-* java -jar target/ToDo-1.0-SNAPSHOT.jar server to-do.yml
+* ```cd </root project directory/>```
+* ```mvn clean package```
+* ```docker run --name leanix-postgres -p 5432:5432 -e POSTGRES_PASSWORD=pg-password -e POSTGRES_USER=pg-user -e POSTGRES_DB=todo -d postgres```
+* ```java -jar target/ToDo-1.0-SNAPSHOT.jar server to-do.yml```
 
 ## Accessing the API's
 * Get all
