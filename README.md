@@ -2,12 +2,12 @@
 ## JSON structure
 ```json lines
 {
-  id [mandatory]
-  name [mandatory]
-  description
+  id: [mandatory],
+  name: [mandatory],
+  description: "",
   tasks: [{
-      name [mandatory]
-      description
+      name: [mandatory],
+      description: ""
   }]
 }
 ```
@@ -28,19 +28,22 @@
 * java -jar target/ToDo-1.0-SNAPSHOT.jar server to-do.yml
 
 ## Accessing the API's
-1. 
+* Get all
+
 ```curl --location --request GET 'localhost:8080/application/todos'```
-2. 
+* Get by Id
+
 ```curl --location --request GET 'localhost:8080/application/todos/{id}'```
-3.
+* Create task
 ```
 curl --location --request POST 'localhost:8080/application/todos' \
 --header 'Content-Type: application/json' \
 --data-raw '{<<task_object>>}'
 ```
-4.
+* Delete task
+
 ```curl --location --request DELETE 'localhost:8080/application/todos/{id}'```
-5.
+* Update an existing task
 ```
 curl --location --request PUT 'localhost:8080/application/todos/{id}' \
 --header 'Content-Type: application/json' \
