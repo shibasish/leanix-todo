@@ -5,6 +5,7 @@ import de.leanix.web.dto.TaskResponse;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class TaskEntity {
     private UUID id = UUID.randomUUID();
 
     @Column(nullable = false)
+    @NotEmpty
     private String name;
 
     private String description;

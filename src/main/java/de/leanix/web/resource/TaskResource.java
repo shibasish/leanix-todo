@@ -6,6 +6,8 @@ import de.leanix.web.dto.TaskResponse;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 
 import javax.ws.rs.core.MediaType;
@@ -47,7 +49,7 @@ public class TaskResource {
 
     @POST
     @UnitOfWork
-    public TaskResponse createTask(TaskEntity taskEntity) {
+    public TaskResponse createTask(@NotNull @Valid TaskEntity taskEntity) {
         return taskRepository.createTask(taskEntity).toResponse();
     }
 
